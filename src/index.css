@@ -19,11 +19,16 @@
   }
 }
 
+@font-face {
+  font-family: "deltarune";
+  src: url("\src\assets\deltarune.ttf") format("truetype");
+}
+
 @theme {
-  --color-background: #ffffff;
+  --color-background: #000000;
   --color-foreground: #323232;
 
-  --color-primary: #495df9;
+  --color-primary: #000000;
   --color-primary-foreground: #ffffff;
 
   --color-input: #fafafa;
@@ -39,9 +44,11 @@
 
   --color-border: #cccccc;
 
-  --font-sans: "Inter", sans-serif;
+  --font-deltarune: "deltarune", sans-serif;
 
   --aspect-poster: 2/3;
+
+  --aspect-rectangle: 3/2;
 
   --aspect-preview: 35/46;
 }
