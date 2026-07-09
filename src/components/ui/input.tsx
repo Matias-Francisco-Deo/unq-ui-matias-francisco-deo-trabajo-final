@@ -1,9 +1,10 @@
 import { cn } from "@/lib/utils";
 
-export const Input = ({
-  className,
-  ...props
-}: React.ComponentProps<"input">) => {
+type inputProps = React.ComponentProps<"input"> & {
+  error: string;
+};
+
+export const Input = ({ error, className, ...props }: inputProps) => {
   return (
     <input
       className={cn(
@@ -14,6 +15,9 @@ export const Input = ({
         "user-invalid:border-destructive",
         "user-invalid:focus:outline-destructive",
         "user-invalid:placeholder:text-destructive",
+
+        error &&
+          "border-red-500 placeholder:text-red-500 focus:outline-red-500",
 
         className,
       )}
