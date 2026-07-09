@@ -2,7 +2,7 @@ import { Outlet } from "react-router";
 
 export function RootLayout() {
   return (
-    <div className="bg-black z-40 text-white min-h-dvh font-mono flex flex-col ">
+    <div className="bg-black z-40 text-white min-h-dvh flex flex-col font-deltarune">
       <div className="border border-white w-full flex text-2xl flex-row items-center px-30 sticky top-0 h-1/3">
         <button>Home</button>
       </div>
