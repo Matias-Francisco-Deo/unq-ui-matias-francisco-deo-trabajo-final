@@ -21,7 +21,7 @@ export const Modal = ({
   return (
     <div
       {...props}
-      className={`bg-background text-xl flex w-1/3 flex-col gap-4 border p-4 ${className}`}
+      className={`bg-background text-xl flex min-w-1/3 flex-col gap-4 border p-4 ${className}`}
     >
       <div className="flex flex-col gap-3">
         <p>{"* " + desc}</p>

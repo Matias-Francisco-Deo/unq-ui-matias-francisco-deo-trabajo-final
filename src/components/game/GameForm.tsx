@@ -38,12 +38,13 @@ export const GameForm = ({
     e.preventDefault();
 
     const lastPreviousLetter = previousWords.at(-1)?.at(-1)?.toUpperCase();
+    const currentWordNormalized = normalizeWord(currentWord);
 
     if (!currentWord) return;
 
     setGameStatus(GameStates["in-game"]);
 
-    game(lastPreviousLetter, currentWord);
+    game(lastPreviousLetter, currentWordNormalized);
   };
 
   const game = (
@@ -81,6 +82,7 @@ export const GameForm = ({
     setPreviousWords([]);
     setTimer(MAX_TIMER);
     setScore(0);
+    setCurrentWord("");
   };
 
   const handleInputChange = (
@@ -91,7 +93,7 @@ export const GameForm = ({
       window.location.href = "/"; // router?
     }
 
-    setCurrentWord(normalizeWord(value));
+    setCurrentWord(value);
   };
 
   const normalizeWord = (str: string) => {
@@ -105,22 +107,21 @@ export const GameForm = ({
 
   const onSecond = useCallback(() => {
     if (gameStatus !== GameStates["in-game"]) return;
-
-    console.log("in game");
-
     setTimer((timer) => {
-      if (gameStatus !== GameStates["in-game"]) return timer;
-      if (timer === 0) {
-        gameOver();
-        return timer;
-      }
       return timer - 1;
     });
   }, [setTimer, gameStatus]);
 
   useEffect(() => {
-    setInterval(onSecond, 1000);
+    const intervalId = setInterval(onSecond, 1000);
+    return () => clearInterval(intervalId);
   }, [onSecond]);
+
+  useEffect(() => {
+    if (gameStatus === GameStates["in-game"] && timer === 0) {
+      gameOver();
+    }
+  }, [timer, gameStatus]);
 
   return (
     <div className="border text-sm flex flex-col items-center justify-center py-4 gap-4 flex-1 ">
@@ -140,6 +141,7 @@ export const GameForm = ({
           autoComplete="off"
           autoCorrect="off"
           spellCheck={false}
+          value={currentWord}
           error={error}
         ></Input>
         <Button type="submit" className="w-4/5 border rounded-none">
