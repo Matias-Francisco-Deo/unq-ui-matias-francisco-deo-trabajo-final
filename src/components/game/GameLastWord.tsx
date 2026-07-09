@@ -1,17 +1,16 @@
 type GameLastWordProps = React.ComponentProps<"div"> & {
-  wordState: [string[], React.Dispatch<React.SetStateAction<string[]>>];
+  words: string[];
 };
 
-export const GameLastWord = ({ wordState, ...props }: GameLastWordProps) => {
-  const [words, _] = wordState;
-
+export const GameLastWord = ({ words, ...props }: GameLastWordProps) => {
+  const lastWord = words.at(-1);
   return (
     <div
-      className="aspect-rectangle size-4/5 border flex flex-col items-center text-xl py-4 gap-2"
+      className="h-1/2 flex-1 border flex flex-col items-center text-xl py-4 gap-2"
       {...props}
     >
       <label className="text-sm">Palabra anterior:</label>
-      <span>{words.at(-1)}</span>
+      <span>{lastWord}</span>
     </div>
   );
 };

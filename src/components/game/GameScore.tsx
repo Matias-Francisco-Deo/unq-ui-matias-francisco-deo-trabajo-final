@@ -1,13 +1,11 @@
 type GameScoreProps = React.ComponentProps<"div"> & {
-  scoreState: [number, React.Dispatch<React.SetStateAction<number>>];
+  score: number;
 };
 
-export const GameScore = ({ scoreState, ...props }: GameScoreProps) => {
-  const [score, _] = scoreState;
-
+export const GameScore = ({ score, ...props }: GameScoreProps) => {
   return (
     <div
-      className="aspect-square size-1/2 border text-sm flex flex-col items-center py-4 gap-2"
+      className="h-1/2 flex-1 border text-sm flex flex-col items-center py-4 gap-2 "
       {...props}
     >
       <label className="text-sm">Puntaje:</label>

@@ -4,23 +4,28 @@ import { GameLastWord } from "./GameLastWord";
 import { GameScore } from "./GameScore";
 
 export const Game = ({ ...props }: React.ComponentProps<"div">) => {
-  const scoreState = useState<number>(0);
-  const wordState = useState<string[]>([]);
+  const [score, setScore] = useState<number>(0);
+  const [words, setWords] = useState<string[]>([]);
   const [timer, setTimer] = useState<number>(2);
 
   return (
-    <div className="w-full h-full flex flex-col items-center">
+    <div className=" w-full flex flex-col items-center gap-10 px-4">
       <span className="text-2xl">{timer}</span>
-      <div className="size-1/3 flex justify-center gap-20" {...props}>
-        <GameLastWord wordState={wordState} />
+      <div className="w-full flex justify-evenly gap-20" {...props}>
+        <GameLastWord words={words} />
         <GameForm
-          scoreState={scoreState}
-          wordState={wordState}
+          setScore={setScore}
+          score={score}
+          previousWords={words}
+          setPreviousWords={setWords}
           timer={timer}
           setTimer={setTimer}
         />
-        <GameScore scoreState={scoreState} />
+        <GameScore score={score} />
       </div>
+      <span className="overflow-y-auto h-50">
+        {words.map((word) => word + " - ")}
+      </span>
     </div>
   );
 };

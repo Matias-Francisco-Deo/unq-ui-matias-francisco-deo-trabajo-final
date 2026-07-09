@@ -8,7 +8,7 @@ export const Button = ({
     <button
       type="button"
       className={cn(
-        "bg-primary text-primary-foreground rounded-lg px-4 py-2 transition",
+        "bg-primary rounded-none text-primary-foreground px-4 py-2 transition",
 
         "enabled:hover:opacity-90 enabled:active:scale-95",
 
