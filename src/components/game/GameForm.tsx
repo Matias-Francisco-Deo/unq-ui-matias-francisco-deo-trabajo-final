@@ -1,4 +1,6 @@
+import type { HighscoresType } from "@/types/types";
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Modal } from "../ui/Modal";
@@ -30,15 +32,17 @@ export const GameForm = ({
   ...props
 }: GameFormProps) => {
   const [currentWord, setCurrentWord] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [gameStatus, setGameStatus] = useState<GameStates>(GameStates.idle);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const lastPreviousLetter = previousWords.at(-1)?.at(-1)?.toUpperCase();
-    const currentWordNormalized = normalizeWord(currentWord);
+    const currentWordNormalized = normalizeString(currentWord);
 
     if (!currentWord) return;
 
@@ -69,13 +73,13 @@ export const GameForm = ({
       return;
     }
 
-    updateNextRound();
+    updateNextRound(currentWordNormalized);
   };
 
-  const updateNextRound = () => {
-    setPreviousWords((prev) => [...prev, currentWord]);
+  const updateNextRound = (currentWordNormalized: string) => {
+    setPreviousWords((prev) => [...prev, currentWordNormalized]);
     setTimer(MAX_TIMER);
-    setScore((prev) => prev + currentWord.length);
+    setScore((prev) => prev + currentWordNormalized.length);
   };
 
   const resetGame = () => {
@@ -96,7 +100,7 @@ export const GameForm = ({
     setCurrentWord(value);
   };
 
-  const normalizeWord = (str: string) => {
+  const normalizeString = (str: string) => {
     return str.trim().toUpperCase();
   };
 
@@ -113,6 +117,7 @@ export const GameForm = ({
   }, [setTimer, gameStatus]);
 
   useEffect(() => {
+    console.log("otro interval");
     const intervalId = setInterval(onSecond, 1000);
     return () => clearInterval(intervalId);
   }, [onSecond]);
@@ -122,6 +127,32 @@ export const GameForm = ({
       gameOver();
     }
   }, [timer, gameStatus]);
+
+  const handleInputNameChange = (
+    e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
+  ) => {
+    const value = e.target.value;
+    setName(normalizeString(value));
+  };
+
+  const uploadGameResults = () => {
+    // name -> top score
+    let rawHighscores = localStorage.getItem("palabrasEncadenadasScores");
+    if (!rawHighscores) {
+      rawHighscores = "{}";
+    }
+    const highscores = JSON.parse(rawHighscores) as HighscoresType;
+
+    const highscore = highscores[name];
+    if (Number(highscore) >= score) return;
+
+    highscores[name ? name : "???"] = score.toString(); // ver este caso
+
+    localStorage.setItem(
+      "palabrasEncadenadasScores",
+      JSON.stringify(highscores),
+    );
+  };
 
   return (
     <div className="border text-sm flex flex-col items-center justify-center py-4 gap-4 flex-1 ">
@@ -153,17 +184,30 @@ export const GameForm = ({
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <Modal
-            cancelText="Rendirse"
+            cancelText="Ir a leaderbord"
             confirmText="Continuar"
             desc={`Game Over, tu puntaje es: ${score}`}
             onCancel={() => {
-              setIsModalOpen(false);
+              navigate("/leaderbord");
             }}
             onConfirm={() => {
               resetGame();
               setIsModalOpen(false);
             }}
-          />
+            onFinally={uploadGameResults}
+          >
+            <Input
+              className="w-20 focus:border-transparent focus:outline-none border-transparent"
+              maxLength={3}
+              autoFocus
+              autoCapitalize="none"
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
+              value={name}
+              onChange={handleInputNameChange}
+            />
+          </Modal>
         </div>
       )}
     </div>

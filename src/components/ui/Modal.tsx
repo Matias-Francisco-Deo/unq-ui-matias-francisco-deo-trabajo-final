@@ -1,12 +1,14 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { Button } from "./button";
 
 type VentanaProps = ComponentProps<"div"> & {
   desc: string;
   cancelText: string;
   confirmText: string;
-  onConfirm: Function;
-  onCancel: Function;
+  onConfirm: () => void;
+  onCancel: () => void;
+  onFinally?: () => void;
+  children: ReactNode;
 };
 
 export const Modal = ({
@@ -16,6 +18,8 @@ export const Modal = ({
   className,
   onConfirm,
   onCancel,
+  onFinally,
+  children,
   ...props
 }: VentanaProps) => {
   return (
@@ -26,12 +30,27 @@ export const Modal = ({
       <div className="flex flex-col gap-3">
         <p>{"* " + desc}</p>
       </div>
+
+      <div className="flex justify-center">{children}</div>
+
       <div className="flex justify-between text-lg px-30">
-        <Button onClick={() => onCancel()} className="bg-transparent">
+        <Button
+          onClick={() => {
+            onCancel();
+            if (onFinally) onFinally();
+          }}
+          className="bg-transparent"
+        >
           {"* " + cancelText}
         </Button>
 
-        <Button onClick={() => onConfirm()} className="bg-transparent">
+        <Button
+          onClick={() => {
+            onConfirm();
+            if (onFinally) onFinally();
+          }}
+          className="bg-transparent"
+        >
           {"* " + confirmText}
         </Button>
       </div>
