@@ -20,16 +20,23 @@ export default function LeaderbordPage() {
       <h1 className="text-4xl p-10">Palabras Encadenadas: Leaderboard</h1>
       <table className="flex overflow-y-auto h-100">
         <thead>
-          {entries.map((arr) => {
-            const name = arr[0];
-            const score = arr[1];
-            return (
-              <tr key={name} className="flex gap-4 text-2xl">
-                <th>{name}</th>
-                <td>{score}</td>
-              </tr>
-            );
-          })}
+          {entries.length > 0 &&
+            entries.map((arr) => {
+              const name = arr[0];
+              const score = arr[1];
+              return (
+                <tr key={name} className="flex gap-4 text-2xl">
+                  <th>{name}</th>
+                  <td>{score}</td>
+                </tr>
+              );
+            })}
+          {entries.length === 0 && (
+            <p>
+              No hay resultados de partidas jugadas. ¡Juega una para ver tu
+              puntaje aquí!
+            </p>
+          )}
         </thead>
       </table>
     </div>

@@ -191,8 +191,13 @@ export const GameForm = ({
           spellCheck={false}
           value={currentWord}
           error={error}
+          disabled={isLoading}
         ></Input>
-        <Button type="submit" className="w-4/5 border rounded-none">
+        <Button
+          type="submit"
+          className="w-4/5 border rounded-none"
+          disabled={isLoading}
+        >
           Ingresar palabra
         </Button>
         <span className="min-h-5">{error ? "* " + error : error}</span>
@@ -201,11 +206,11 @@ export const GameForm = ({
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <Modal
-            cancelText="Ir a leaderbord"
+            cancelText="Ir a leaderboard"
             confirmText="Continuar"
             desc={`Game Over, tu puntaje es: ${score}`}
             onCancel={() => {
-              navigate("/leaderbord");
+              navigate("/leaderboard");
             }}
             onConfirm={() => {
               resetGame();

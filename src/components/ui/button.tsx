@@ -10,9 +10,9 @@ export const Button = ({
       className={cn(
         "bg-primary rounded-none text-primary-foreground px-4 py-2 transition",
 
-        "enabled:hover:opacity-90 enabled:active:scale-95",
+        "enabled:hover:opacity-80 enabled:active:scale-95",
 
-        "disabled:cursor-not-allowed disabled:opacity-70",
+        "disabled:cursor-not-allowed disabled:opacity-50",
 
         className,
       )}
