@@ -10,7 +10,7 @@ export const GameLastWord = ({ words, ...props }: GameLastWordProps) => {
       {...props}
     >
       <label className="text-sm">Palabra anterior:</label>
-      <span>{lastWord}</span>
+      <span>{lastWord ? lastWord : "-"}</span>
     </div>
   );
 };
