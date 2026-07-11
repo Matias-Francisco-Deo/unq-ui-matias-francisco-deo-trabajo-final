@@ -3,6 +3,8 @@ import { getHighscores } from "@/lib/scores";
 export default function LeaderbordPage() {
   const highscores = getHighscores();
 
+  console.log(highscores);
+
   const entries = Object.entries(highscores).sort((scoreArr1, scoreArr2) => {
     const score1 = Number(scoreArr1[1]);
     const score2 = Number(scoreArr2[1]);

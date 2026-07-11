@@ -11,6 +11,8 @@ export const uploadGameResults = (name: string, score: number) => {
   const highscore = highscores[name];
   if (Number(highscore) >= score) return;
 
+  console.log(name, score, highscore);
+
   setHighscore(name, score, highscores);
 };
 
@@ -31,5 +33,7 @@ export function setHighscore(
 ) {
   highscores[name] = score.toString();
 
-  localStorage.setItem("palabrasEncadenadasScores", JSON.stringify(highscores));
+  console.log(highscores);
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(highscores));
 }

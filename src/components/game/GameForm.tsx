@@ -193,7 +193,7 @@ export const GameForm = ({
               resetGame();
               setIsModalOpen(false);
             }}
-            onFinally={uploadGameResults}
+            onFinally={() => uploadGameResults(name, score)}
           >
             <Input
               className="w-20 focus:border-transparent focus:outline-none border-transparent"
