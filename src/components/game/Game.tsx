@@ -1,3 +1,4 @@
+import { MAX_TIMER } from "@/constants/constants";
 import { useState } from "react";
 import { GameForm } from "./GameForm";
 import { GameLastWord } from "./GameLastWord";
@@ -6,7 +7,7 @@ import { GameScore } from "./GameScore";
 export const Game = ({ ...props }: React.ComponentProps<"div">) => {
   const [score, setScore] = useState<number>(0);
   const [words, setWords] = useState<string[]>([]);
-  const [timer, setTimer] = useState<number>(2);
+  const [timer, setTimer] = useState<number>(MAX_TIMER);
 
   return (
     <div className=" w-full flex flex-col items-center gap-10 px-4">

@@ -1,4 +1,6 @@
-import type { HighscoresType } from "@/types/types";
+import { MAX_TIMER } from "@/constants/constants";
+import { validateWord } from "@/services/validateWordServices";
+import type { HighscoresType, WordValidation } from "@/types/types";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "../ui/button";
@@ -13,8 +15,6 @@ type GameFormProps = React.ComponentProps<"form"> & {
   timer: number;
   setTimer: React.Dispatch<React.SetStateAction<number>>;
 };
-
-const MAX_TIMER = 2;
 
 enum GameStates {
   "idle",
@@ -36,6 +36,24 @@ export const GameForm = ({
   const [gameStatus, setGameStatus] = useState<GameStates>(GameStates.idle);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const validateWordFunc = (currentWord: string) => {
+    setIsLoading(true);
+    validateWord(currentWord)
+      .then((wordValidation: WordValidation) => {
+        const wordExists = wordValidation.exists;
+        if (!wordExists) {
+          setError("La palabra no es válida");
+          return;
+        }
+        updateNextRound(currentWord);
+      })
+      .catch((error: Error) => setError(error.message))
+      .finally(() => setIsLoading(false));
+  };
+
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -64,16 +82,16 @@ export const GameForm = ({
       return;
     }
 
-    const wordHookedSuccessfully =
+    const wordStartsWithPreviousLetter =
       !lastPreviousLetter ||
       currentWordNormalized.startsWith(lastPreviousLetter);
 
-    if (!wordHookedSuccessfully) {
+    if (!wordStartsWithPreviousLetter) {
       setError(`La palabra no comienza con ${lastPreviousLetter}`);
       return;
     }
 
-    updateNextRound(currentWordNormalized);
+    validateWordFunc(currentWordNormalized);
   };
 
   const updateNextRound = (currentWordNormalized: string) => {
@@ -94,7 +112,7 @@ export const GameForm = ({
   ) => {
     const value = e.target.value;
     if (value.toLowerCase() === "gaster") {
-      window.location.href = "/"; // router?
+      window.location.reload(); // aclarar
     }
 
     setCurrentWord(value);
@@ -110,14 +128,13 @@ export const GameForm = ({
   };
 
   const onSecond = useCallback(() => {
-    if (gameStatus !== GameStates["in-game"]) return;
+    if (gameStatus !== GameStates["in-game"] || isLoading) return;
     setTimer((timer) => {
       return timer - 1;
     });
-  }, [setTimer, gameStatus]);
+  }, [setTimer, gameStatus, isLoading]);
 
   useEffect(() => {
-    console.log("otro interval");
     const intervalId = setInterval(onSecond, 1000);
     return () => clearInterval(intervalId);
   }, [onSecond]);
