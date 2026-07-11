@@ -1,6 +1,6 @@
 import { getHighscores } from "@/lib/scores";
 
-export default function LeaderbordPage() {
+export default function LeaderboardPage() {
   const highscores = getHighscores();
 
   console.log(highscores);

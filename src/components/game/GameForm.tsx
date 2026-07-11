@@ -38,7 +38,7 @@ export const GameForm = ({
   ...props
 }: GameFormProps) => {
   const [currentWord, setCurrentWord] = useState<string>("");
-  const [name, setName] = useState<string>("");
+  const [playername, setPlayerName] = useState<string>("");
   const [gameStatus, setGameStatus] = useState<GameStates>(GameStates.idle);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -101,6 +101,7 @@ export const GameForm = ({
   };
 
   const updateNextRound = (currentWordNormalized: string) => {
+    setCurrentWord("");
     setPreviousWords((prev) => [...prev, currentWordNormalized]);
     setTimer(MAX_TIMER);
     setScore((prev) => prev + currentWordNormalized.length);
@@ -150,7 +151,7 @@ export const GameForm = ({
     e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
   ) => {
     const value = e.target.value;
-    setName(sacarCaracteresEspeciales(value));
+    setPlayerName(sacarCaracteresEspeciales(value));
   };
 
   return (
@@ -193,7 +194,7 @@ export const GameForm = ({
               resetGame();
               setIsModalOpen(false);
             }}
-            onFinally={() => uploadGameResults(name, score)}
+            onFinally={() => uploadGameResults(playername, score)}
           >
             <Input
               className="w-20 focus:border-transparent focus:outline-none border-transparent"
@@ -203,7 +204,7 @@ export const GameForm = ({
               autoComplete="off"
               autoCorrect="off"
               spellCheck={false}
-              value={name}
+              value={playername}
               onChange={handleInputNameChange}
             />
           </Modal>
