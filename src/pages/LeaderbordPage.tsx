@@ -1,14 +1,9 @@
-import type { HighscoresType } from "@/types/types";
+import { getHighscores } from "@/lib/scores";
 
 export default function LeaderbordPage() {
-  let rawHighscores = localStorage.getItem("palabrasEncadenadasScores"); // un servicio común?
-  if (!rawHighscores) {
-    rawHighscores = "{}";
-  }
-  const highscores = JSON.parse(rawHighscores) as HighscoresType;
+  const highscores = getHighscores();
 
   const entries = Object.entries(highscores).sort((scoreArr1, scoreArr2) => {
-    // ordenar en la carga?
     const score1 = Number(scoreArr1[1]);
     const score2 = Number(scoreArr2[1]);
 

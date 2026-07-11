@@ -1,6 +1,12 @@
 import { MAX_TIMER } from "@/constants/constants";
+import { uploadGameResults } from "@/lib/scores";
 import { validateWord } from "@/services/validateWordServices";
-import type { HighscoresType, WordValidation } from "@/types/types";
+import type { WordValidation } from "@/types/types";
+import {
+  normalizeString,
+  sacarCaracteresEspeciales,
+  stringToUpperAndTrim,
+} from "@/utils/stringNormalization";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "../ui/button";
@@ -36,24 +42,7 @@ export const GameForm = ({
   const [gameStatus, setGameStatus] = useState<GameStates>(GameStates.idle);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const validateWordFunc = (currentWord: string) => {
-    setIsLoading(true);
-    validateWord(currentWord)
-      .then((wordValidation: WordValidation) => {
-        const wordExists = wordValidation.exists;
-        if (!wordExists) {
-          setError("La palabra no es válida");
-          return;
-        }
-        updateNextRound(currentWord);
-      })
-      .catch((error: Error) => setError(error.message))
-      .finally(() => setIsLoading(false));
-  };
-
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -66,21 +55,16 @@ export const GameForm = ({
 
     setGameStatus(GameStates["in-game"]);
 
-    game(lastPreviousLetter, currentWordNormalized);
+    nextRound(lastPreviousLetter, currentWordNormalized);
   };
 
-  const game = (
+  const nextRound = (
     lastPreviousLetter: string | undefined,
     currentWordNormalized: string,
   ) => {
     setError("");
 
     const currentWordInPast = previousWords.includes(currentWordNormalized);
-
-    if (currentWordInPast) {
-      setError("La palabra ya fue usada");
-      return;
-    }
 
     const wordStartsWithPreviousLetter =
       !lastPreviousLetter ||
@@ -91,7 +75,29 @@ export const GameForm = ({
       return;
     }
 
-    validateWordFunc(currentWordNormalized);
+    if (currentWordInPast) {
+      setError("La palabra ya fue usada");
+      return;
+    }
+
+    validateWordWithAPI(currentWordNormalized);
+  };
+
+  const validateWordWithAPI = (currentWord: string) => {
+    setIsLoading(true);
+    validateWord(currentWord)
+      .then(onValidationSuccessful)
+      .catch((error: Error) => setError(error.message))
+      .finally(() => setIsLoading(false));
+  };
+
+  const onValidationSuccessful = (wordValidation: WordValidation) => {
+    const wordExists = wordValidation.exists;
+    if (!wordExists) {
+      setError("La palabra no es válida");
+      return;
+    }
+    updateNextRound(currentWord);
   };
 
   const updateNextRound = (currentWordNormalized: string) => {
@@ -112,14 +118,9 @@ export const GameForm = ({
   ) => {
     const value = e.target.value;
     if (value.toLowerCase() === "gaster") {
-      window.location.reload(); // aclarar
+      navigate(0); // aclarar
     }
-
-    setCurrentWord(value);
-  };
-
-  const normalizeString = (str: string) => {
-    return str.trim().toUpperCase();
+    setCurrentWord(stringToUpperAndTrim(value));
   };
 
   const gameOver = () => {
@@ -149,26 +150,7 @@ export const GameForm = ({
     e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
   ) => {
     const value = e.target.value;
-    setName(normalizeString(value));
-  };
-
-  const uploadGameResults = () => {
-    // name -> top score
-    let rawHighscores = localStorage.getItem("palabrasEncadenadasScores");
-    if (!rawHighscores) {
-      rawHighscores = "{}";
-    }
-    const highscores = JSON.parse(rawHighscores) as HighscoresType;
-
-    const highscore = highscores[name];
-    if (Number(highscore) >= score) return;
-
-    highscores[name ? name : "???"] = score.toString(); // ver este caso
-
-    localStorage.setItem(
-      "palabrasEncadenadasScores",
-      JSON.stringify(highscores),
-    );
+    setName(sacarCaracteresEspeciales(value));
   };
 
   return (
