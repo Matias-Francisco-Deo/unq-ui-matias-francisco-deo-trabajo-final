@@ -60,8 +60,6 @@ export const GameForm = ({
     const lastPreviousLetter = previousWords.at(-1)?.at(-1)?.toUpperCase();
     const currentWordNormalized = normalizeString(currentWord);
 
-    if (!currentWord) return;
-
     setGameStatus(GameStates["in-game"]);
 
     nextRound(lastPreviousLetter, currentWordNormalized);
