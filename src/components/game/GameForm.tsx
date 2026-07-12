@@ -48,6 +48,15 @@ export const GameForm = ({
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!currentWord || isLoading) return;
+
+    if (currentWord.toUpperCase() === "EGG") {
+      // easter egg 2
+      new Audio("/src/assets/egg.mp3").play();
+      setCurrentWord("");
+      return;
+    }
+
     const lastPreviousLetter = previousWords.at(-1)?.at(-1)?.toUpperCase();
     const currentWordNormalized = normalizeString(currentWord);
 
@@ -118,9 +127,8 @@ export const GameForm = ({
     e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
   ) => {
     const value = e.target.value;
-    if (value.toLowerCase() === "gaster") {
-      navigate(0); // aclarar
-    }
+    if (value.toUpperCase() === "GASTER") navigate(0); // easter egg 1
+
     setCurrentWord(stringToUpperAndTrim(value));
   };
 
