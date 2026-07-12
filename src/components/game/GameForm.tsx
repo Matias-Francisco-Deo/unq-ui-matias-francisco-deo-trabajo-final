@@ -1,5 +1,5 @@
 import { MAX_TIMER } from "@/constants/constants";
-import { playSoundEgg, playSoundSelect } from "@/lib/audio";
+import { playSoundEgg } from "@/lib/audio";
 import { uploadGameResults } from "@/lib/scores";
 import { validateWord } from "@/services/validateWordServices";
 import type { WordValidation } from "@/types/types";
@@ -187,7 +187,6 @@ export const GameForm = ({
           type="submit"
           className="w-4/5 border rounded-none"
           disabled={isLoading}
-          onClick={() => playSoundSelect()}
         >
           Ingresar palabra
         </Button>
@@ -209,7 +208,6 @@ export const GameForm = ({
               setIsModalOpen(false);
             }}
             onFinally={() => {
-              playSoundSelect();
               uploadGameResults(playername, score);
             }}
           >

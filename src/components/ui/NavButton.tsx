@@ -1,4 +1,3 @@
-import { playSoundSelect } from "@/lib/audio";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router";
 import { Button } from "./button";
@@ -15,7 +14,6 @@ export const NavButton = ({ className, to, ...props }: NavButtonProps) => {
       className={cn(className)}
       onClick={() => {
         navigate(to);
-        playSoundSelect();
       }}
       {...props}
     />
