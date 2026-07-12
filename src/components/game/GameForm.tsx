@@ -1,5 +1,5 @@
 import { MAX_TIMER } from "@/constants/constants";
-import { playSoundEgg, playSoundSelect } from "@/lib/audio";
+import { playSoundEgg, playSoundFlowery, playSoundSelect } from "@/lib/audio";
 import { uploadGameResults } from "@/lib/scores";
 import { validateWord } from "@/services/validateWordServices";
 import type { WordValidation } from "@/types/types";
@@ -54,6 +54,17 @@ export const GameForm = ({
     if (currentWord.toUpperCase() === "EGG") {
       // easter egg 2
       playSoundEgg();
+      setCurrentWord("");
+      return;
+    }
+
+    if (
+      ["FLOWERY", "FLOWERMAN", "JARONA", "SANFRANCISCO", "RALY"].includes(
+        currentWord.toUpperCase(),
+      )
+    ) {
+      // easter egg 3
+      playSoundFlowery();
       setCurrentWord("");
       return;
     }

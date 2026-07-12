@@ -40,6 +40,9 @@ A continuación, dejo fuentes para evidenciarlos:
   - https://www.youtube.com/watch?v=jkeqVsuD1uQ (Deltarune)
 #### Si se escribe "EGG" y se le da al botón, suena un sonido (en Deltarune, el sonido suena al ser usado el objeto):
   - https://youtu.be/pdggCw3kP9c?si=FwxF3JajhvzFKBS-&t=64
+#### Si se escribe "FLOWERY", "FLOWERMAN", "JARONA", "SANFRANCISCO" o "RALY" y se le da al botón, suena un sonido de un personaje de Deltarune:
+  - https://www.youtube.com/watch?v=t2SoGk-WuTU&pp=ygUOZmxvd2VyeSBzb3VuZHM%3D
+  - https://youtu.be/qZYA0RzYLE0?si=B7N3DiiEYwrjJnOV&t=572
 
 Como detalle adicional, esto no afecta al juego, puesto que ninguna de las palabras existen en la API, ni son comunes en el castellano.
 
