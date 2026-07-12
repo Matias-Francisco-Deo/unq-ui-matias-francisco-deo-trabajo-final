@@ -19,7 +19,7 @@ export const Button = ({
       }}
       {...props}
     >
-      {/* <img src={"src/assets/soul.png"} alt="selected" className="w-3 h-3" /> */}
+      {/* <img src={"src/assets/soul.png"} alt="selected" className="w-6 h-6" /> */}
       {children}
     </button>
   );

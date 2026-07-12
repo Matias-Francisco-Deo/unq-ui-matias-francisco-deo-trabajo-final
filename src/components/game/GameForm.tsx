@@ -1,5 +1,5 @@
 import { MAX_TIMER } from "@/constants/constants";
-import { playSoundEgg } from "@/lib/audio";
+import { playSoundEgg, playSoundSelect } from "@/lib/audio";
 import { uploadGameResults } from "@/lib/scores";
 import { validateWord } from "@/services/validateWordServices";
 import type { WordValidation } from "@/types/types";
@@ -161,6 +161,11 @@ export const GameForm = ({
     setPlayerName(sacarCaracteresEspeciales(value));
   };
 
+  const handleConfirm = () => {
+    resetGame();
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="border text-sm flex flex-col items-center justify-center py-4 gap-4 flex-1 ">
       <label className="text-sm">Escribe tu palabra:</label>
@@ -170,7 +175,7 @@ export const GameForm = ({
         {...props}
       >
         <Input
-          className="w-4/5 rounded-none"
+          className="w-4/5 rounded-none "
           placeholder="¡Aquí!"
           onChange={handleInputChange}
           maxLength={20}
@@ -185,7 +190,7 @@ export const GameForm = ({
         ></Input>
         <Button
           type="submit"
-          className="w-4/5 border rounded-none"
+          className="w-4/5 border rounded-none whitespace-nowrap gap-2"
           disabled={isLoading}
         >
           Ingresar palabra
@@ -203,10 +208,7 @@ export const GameForm = ({
             onCancel={() => {
               navigate("/leaderboard");
             }}
-            onConfirm={() => {
-              resetGame();
-              setIsModalOpen(false);
-            }}
+            onConfirm={handleConfirm}
             onFinally={() => {
               uploadGameResults(playername, score);
             }}
@@ -221,6 +223,13 @@ export const GameForm = ({
               spellCheck={false}
               value={playername}
               onChange={handleInputNameChange}
+              onKeyDown={(evt) => {
+                if (evt.key === "Enter") {
+                  evt.preventDefault();
+                  handleConfirm();
+                  playSoundSelect();
+                }
+              }}
             />
           </Modal>
         </div>
