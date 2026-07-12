@@ -1,32 +1,49 @@
-# React + TypeScript + Vite
+## Cómo descargar el proyecto
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Para descargar el proyecto, se puede clonar el repositorio utilizando `git clone https://github.com/Matias-Francisco-Deo/unq-ui-matias-francisco-deo-trabajo-final.git`
 
-Currently, two official plugins are available:
+Otra manera posible es descargando los archivos del repositorio desde github.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Ejecutar el proyecto de manera local
 
-## React Compiler
+Una vez descargado, se debe abrir el archivo mediante una terminal, entonces ejecutar los siguientes comandos:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Instalar dependencias:
 
-## Expanding the Oxlint configuration
+```shell
+npm i
+```
+o
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```shell
+pnpm i
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Correr el juego (levantar la aplicación):
+
+```shell
+npm run dev
+```
+o
+
+```shell
+pnpm dev
+```
+
+
+## Easter Eggs
+
+En el TP se adicionaron unos Easter Eggs en referencia a los videojuegos Undertale y Deltarune (la página está basada más que nada en este último).
+A continuación, dejo fuentes para evidenciarlos:
+#### Si se escribe "GASTER" se recarga la página (en los juegos mencionados, se reinician): 
+  - https://www.youtube.com/watch?v=p5U7ooB90TY (Undertale)
+  - https://www.youtube.com/watch?v=jkeqVsuD1uQ (Deltarune)
+#### Si se escribe "EGG" y se le da al botón, suena un sonido (en Deltarune, el sonido suena al ser usado el objeto):
+  - https://youtu.be/pdggCw3kP9c?si=FwxF3JajhvzFKBS-&t=64
+#### Si se escribe "FLOWERY", "FLOWERMAN", "JARONA", "SANFRANCISCO" o "RALY" y se le da al botón, suena un sonido de un personaje de Deltarune:
+  - https://www.youtube.com/watch?v=t2SoGk-WuTU&pp=ygUOZmxvd2VyeSBzb3VuZHM%3D
+  - https://youtu.be/qZYA0RzYLE0?si=B7N3DiiEYwrjJnOV&t=572
+
+Como detalle adicional, esto no afecta al juego, puesto que ninguna de las palabras existen en la API, ni son comunes en el castellano.
+
+

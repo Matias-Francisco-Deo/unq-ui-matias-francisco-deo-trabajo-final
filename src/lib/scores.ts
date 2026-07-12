@@ -11,8 +11,6 @@ export const uploadGameResults = (name: string, score: number) => {
   const highscore = highscores[name];
   if (Number(highscore) >= score) return;
 
-  console.log(name, score, highscore);
-
   setHighscore(name, score, highscores);
 };
 
@@ -31,9 +29,9 @@ export function setHighscore(
   score: number,
   highscores: Highscores,
 ) {
-  highscores[name] = score.toString();
+  const normalizedName = name.padEnd(3, "-");
 
-  console.log(highscores);
+  highscores[normalizedName] = score.toString();
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify(highscores));
 }

@@ -25,14 +25,12 @@ export const Modal = ({
   return (
     <div
       {...props}
-      className={`bg-background text-xl flex min-w-1/3 flex-col gap-4 border p-4 ${className}`}
+      className={`bg-background text-xl flex min-w-1/3  flex-col gap-4 border p-4 ${className}`}
     >
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col py-2 gap-3">
         <p>{"* " + desc}</p>
       </div>
-
       <div className="flex justify-center">{children}</div>
-
       <div className="flex justify-between text-lg px-30">
         <Button
           onClick={() => {

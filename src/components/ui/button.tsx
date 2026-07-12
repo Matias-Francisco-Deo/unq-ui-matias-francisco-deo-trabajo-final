@@ -1,22 +1,26 @@
+import { playSoundSelect } from "@/lib/audio";
 import { cn } from "@/lib/utils";
+
+type ButtonProps = React.ComponentProps<"button">;
 
 export const Button = ({
   className,
+  children,
+  onClick = () => {},
   ...props
-}: React.ComponentProps<"button">) => {
+}: ButtonProps) => {
   return (
     <button
       type="button"
-      className={cn(
-        "bg-primary rounded-none text-primary-foreground px-4 py-2 transition",
-
-        "enabled:hover:opacity-90 enabled:active:scale-95",
-
-        "disabled:cursor-not-allowed disabled:opacity-70",
-
-        className,
-      )}
+      className={cn("button", className)}
+      onClick={(evt) => {
+        onClick(evt);
+        playSoundSelect();
+      }}
       {...props}
-    />
+    >
+      {/* <img src={"src/assets/soul.png"} alt="selected" className="w-6 h-6" /> */}
+      {children}
+    </button>
   );
 };

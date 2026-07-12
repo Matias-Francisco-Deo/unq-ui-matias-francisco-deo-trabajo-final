@@ -1,4 +1,5 @@
 import { MAX_TIMER } from "@/constants/constants";
+import { playSoundEgg, playSoundFlowery, playSoundSelect } from "@/lib/audio";
 import { uploadGameResults } from "@/lib/scores";
 import { validateWord } from "@/services/validateWordServices";
 import type { WordValidation } from "@/types/types";
@@ -7,7 +8,7 @@ import {
   sacarCaracteresEspeciales,
   stringToUpperAndTrim,
 } from "@/utils/stringNormalization";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -43,12 +44,31 @@ export const GameForm = ({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!currentWord || isLoading) return;
+
+    if (currentWord.toUpperCase() === "EGG") {
+      // easter egg 2
+      playSoundEgg();
+      setCurrentWord("");
+      return;
+    }
+
+    if (
+      ["FLOWERY", "FLOWERMAN", "JARONA", "SANFRANCISCO", "RALY"].includes(
+        currentWord.toUpperCase(),
+      )
+    ) {
+      // easter egg 3
+      playSoundFlowery();
+      setCurrentWord("");
+      return;
+    }
 
     const lastPreviousLetter = previousWords.at(-1)?.at(-1)?.toUpperCase();
     const currentWordNormalized = normalizeString(currentWord);
@@ -88,13 +108,19 @@ export const GameForm = ({
     validateWord(currentWord)
       .then(onValidationSuccessful)
       .catch((error: Error) => setError(error.message))
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+        setTimeout(() => {
+          // sin este timeout no llega a tiempo
+          inputRef?.current?.focus(); // focusea al input principal
+        }, 0);
+      });
   };
 
   const onValidationSuccessful = (wordValidation: WordValidation) => {
     const wordExists = wordValidation.exists;
     if (!wordExists) {
-      setError("La palabra no es válida");
+      setError("La palabra no existe");
       return;
     }
     updateNextRound(currentWord);
@@ -118,9 +144,8 @@ export const GameForm = ({
     e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
   ) => {
     const value = e.target.value;
-    if (value.toLowerCase() === "gaster") {
-      navigate(0); // aclarar
-    }
+    if (value.toUpperCase() === "GASTER") navigate(0); // easter egg 1
+
     setCurrentWord(stringToUpperAndTrim(value));
   };
 
@@ -154,6 +179,11 @@ export const GameForm = ({
     setPlayerName(sacarCaracteresEspeciales(value));
   };
 
+  const handleConfirm = () => {
+    resetGame();
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="border text-sm flex flex-col items-center justify-center py-4 gap-4 flex-1 ">
       <label className="text-sm">Escribe tu palabra:</label>
@@ -163,7 +193,7 @@ export const GameForm = ({
         {...props}
       >
         <Input
-          className="w-4/5 rounded-none"
+          className="w-4/5 rounded-none "
           placeholder="¡Aquí!"
           onChange={handleInputChange}
           maxLength={20}
@@ -174,8 +204,14 @@ export const GameForm = ({
           spellCheck={false}
           value={currentWord}
           error={error}
+          disabled={isLoading}
+          ref={inputRef}
         ></Input>
-        <Button type="submit" className="w-4/5 border rounded-none">
+        <Button
+          type="submit"
+          className="w-4/5 border rounded-none whitespace-nowrap gap-2"
+          disabled={isLoading}
+        >
           Ingresar palabra
         </Button>
         <span className="min-h-5">{error ? "* " + error : error}</span>
@@ -184,17 +220,17 @@ export const GameForm = ({
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <Modal
-            cancelText="Ir a leaderbord"
+            cancelText="Ir a leaderboard"
             confirmText="Continuar"
-            desc={`Game Over, tu puntaje es: ${score}`}
+            className=""
+            desc={`Game Over, tu puntaje es: ${score}. Has encadenado ${previousWords.length} palabra${previousWords.length !== 1 ? "s" : ""}.`}
             onCancel={() => {
-              navigate("/leaderbord");
+              navigate("/leaderboard");
             }}
-            onConfirm={() => {
-              resetGame();
-              setIsModalOpen(false);
+            onConfirm={handleConfirm}
+            onFinally={() => {
+              uploadGameResults(playername, score);
             }}
-            onFinally={() => uploadGameResults(playername, score)}
           >
             <Input
               className="w-20 focus:border-transparent focus:outline-none border-transparent"
@@ -206,6 +242,13 @@ export const GameForm = ({
               spellCheck={false}
               value={playername}
               onChange={handleInputNameChange}
+              onKeyDown={(evt) => {
+                if (evt.key === "Enter") {
+                  evt.preventDefault();
+                  handleConfirm();
+                  playSoundSelect();
+                }
+              }}
             />
           </Modal>
         </div>
