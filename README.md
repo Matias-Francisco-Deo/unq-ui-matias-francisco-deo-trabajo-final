@@ -2,27 +2,34 @@
 
 Para descargar el proyecto, se puede clonar el repositorio utilizando `git clone https://github.com/Matias-Francisco-Deo/unq-ui-matias-francisco-deo-trabajo-final.git`
 
-Otra manera posible es 
+Otra manera posible es descargando los archivos del repositorio desde github.
 
-## Expanding the Oxlint configuration
+## Ejecutar el proyecto de manera local
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+Una vez descargado, se debe abrir el archivo mediante una terminal, entonces ejecutar los siguientes comandos:
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+Instalar dependencias:
+
+```shell
+npm i
+```
+o
+
+```shell
+pnpm i
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Correr el juego (levantar la aplicación):
+
+```shell
+npm run dev
+```
+o
+
+```shell
+pnpm dev
+```
+
 
 ## Easter Eggs
 
