@@ -1,4 +1,5 @@
 import { MAX_TIMER } from "@/constants/constants";
+import { playSoundEgg, playSoundSelect } from "@/lib/audio";
 import { uploadGameResults } from "@/lib/scores";
 import { validateWord } from "@/services/validateWordServices";
 import type { WordValidation } from "@/types/types";
@@ -52,7 +53,7 @@ export const GameForm = ({
 
     if (currentWord.toUpperCase() === "EGG") {
       // easter egg 2
-      new Audio("/src/assets/egg.mp3").play();
+      playSoundEgg();
       setCurrentWord("");
       return;
     }
@@ -186,6 +187,7 @@ export const GameForm = ({
           type="submit"
           className="w-4/5 border rounded-none"
           disabled={isLoading}
+          onClick={() => playSoundSelect()}
         >
           Ingresar palabra
         </Button>
@@ -197,7 +199,8 @@ export const GameForm = ({
           <Modal
             cancelText="Ir a leaderboard"
             confirmText="Continuar"
-            desc={`Game Over, tu puntaje es: ${score}. Has encadenado ${previousWords.length} palabras.`}
+            className=""
+            desc={`Game Over, tu puntaje es: ${score}. Has encadenado ${previousWords.length} palabra${previousWords.length > 1 ? "s" : ""}.`}
             onCancel={() => {
               navigate("/leaderboard");
             }}
@@ -205,7 +208,10 @@ export const GameForm = ({
               resetGame();
               setIsModalOpen(false);
             }}
-            onFinally={() => uploadGameResults(playername, score)}
+            onFinally={() => {
+              playSoundSelect();
+              uploadGameResults(playername, score);
+            }}
           >
             <Input
               className="w-20 focus:border-transparent focus:outline-none border-transparent"

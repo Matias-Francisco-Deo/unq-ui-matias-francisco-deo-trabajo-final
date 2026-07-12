@@ -2,21 +2,13 @@ import { cn } from "@/lib/utils";
 
 export const Button = ({
   className,
+  children,
   ...props
 }: React.ComponentProps<"button">) => {
   return (
-    <button
-      type="button"
-      className={cn(
-        "bg-primary rounded-none text-primary-foreground px-4 py-2 transition",
-
-        "enabled:hover:opacity-80 enabled:active:scale-95",
-
-        "disabled:cursor-not-allowed disabled:opacity-50",
-
-        className,
-      )}
-      {...props}
-    />
+    <button type="button" className={cn("button", className)} {...props}>
+      {/* <img src={"src/assets/soul.png"} alt="selected" className="w-3 h-3" /> */}
+      {children}
+    </button>
   );
 };

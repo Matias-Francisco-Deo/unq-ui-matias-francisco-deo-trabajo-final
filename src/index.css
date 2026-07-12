@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+.button {
+  @apply flex flex-row;
+
+  @apply bg-primary rounded-none text-primary-foreground px-4 py-2 transition;
+
+  @apply enabled:hover:text-selection;
+
+  @apply disabled:cursor-not-allowed disabled:opacity-50;
+}
+
 @layer base {
   button {
     cursor: pointer;
@@ -45,6 +55,8 @@
   --color-border: #cccccc;
 
   --font-deltarune: "deltarune", sans-serif;
+
+  --color-selection: #f9ff10;
 
   --aspect-poster: 2/3;
 

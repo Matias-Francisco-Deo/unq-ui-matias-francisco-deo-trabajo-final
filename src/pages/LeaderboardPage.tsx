@@ -3,16 +3,16 @@ import { getHighscores } from "@/lib/scores";
 export default function LeaderboardPage() {
   const highscores = getHighscores();
 
-  console.log(highscores);
-
   const entries = Object.entries(highscores)
     .sort((scoreArr1, scoreArr2) => {
       const score1 = Number(scoreArr1[1]);
       const score2 = Number(scoreArr2[1]);
 
-      return score1 > score2 ? -1 : 1;
+      return score2 - score1;
     })
     .slice(0, 10);
+
+  // fijarse que se rompe
 
   const hasEntries = entries.length > 0;
   return (
