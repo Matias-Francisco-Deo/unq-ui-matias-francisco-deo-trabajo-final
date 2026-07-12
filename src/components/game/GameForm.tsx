@@ -103,7 +103,7 @@ export const GameForm = ({
   const onValidationSuccessful = (wordValidation: WordValidation) => {
     const wordExists = wordValidation.exists;
     if (!wordExists) {
-      setError("La palabra no es válida");
+      setError("La palabra no existe");
       return;
     }
     updateNextRound(currentWord);
@@ -199,7 +199,7 @@ export const GameForm = ({
           <Modal
             cancelText="Ir a leaderboard"
             confirmText="Continuar"
-            desc={`Game Over, tu puntaje es: ${score}`}
+            desc={`Game Over, tu puntaje es: ${score}. Has encadenado ${previousWords.length} palabras.`}
             onCancel={() => {
               navigate("/leaderboard");
             }}
