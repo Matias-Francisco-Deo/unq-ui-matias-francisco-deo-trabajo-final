@@ -12,8 +12,6 @@ export default function LeaderboardPage() {
     })
     .slice(0, 10);
 
-  // fijarse que se rompe
-
   const hasEntries = entries.length > 0;
   return (
     <div className="w-full h-full flex flex-col items-center">

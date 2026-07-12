@@ -29,7 +29,9 @@ export function setHighscore(
   score: number,
   highscores: Highscores,
 ) {
-  highscores[name] = score.toString();
+  const normalizedName = name.padEnd(3, "-");
+
+  highscores[normalizedName] = score.toString();
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify(highscores));
 }
