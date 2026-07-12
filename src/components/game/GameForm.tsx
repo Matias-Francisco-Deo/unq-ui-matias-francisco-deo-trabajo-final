@@ -223,7 +223,7 @@ export const GameForm = ({
             cancelText="Ir a leaderboard"
             confirmText="Continuar"
             className=""
-            desc={`Game Over, tu puntaje es: ${score}. Has encadenado ${previousWords.length} palabra${previousWords.length > 1 ? "s" : ""}.`}
+            desc={`Game Over, tu puntaje es: ${score}. Has encadenado ${previousWords.length} palabra${previousWords.length !== 1 ? "s" : ""}.`}
             onCancel={() => {
               navigate("/leaderboard");
             }}
