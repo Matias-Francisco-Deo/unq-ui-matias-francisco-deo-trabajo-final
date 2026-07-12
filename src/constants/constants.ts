@@ -1,1 +1,1 @@
-export const MAX_TIMER = 15;
+export const MAX_TIMER = 2;
