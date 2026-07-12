@@ -48,10 +48,10 @@ export const GameForm = ({
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!currentWord || isLoading) return;
+
     const lastPreviousLetter = previousWords.at(-1)?.at(-1)?.toUpperCase();
     const currentWordNormalized = normalizeString(currentWord);
-
-    if (!currentWord) return;
 
     setGameStatus(GameStates["in-game"]);
 
