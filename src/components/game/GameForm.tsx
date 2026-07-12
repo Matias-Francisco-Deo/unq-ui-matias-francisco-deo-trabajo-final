@@ -8,7 +8,7 @@ import {
   sacarCaracteresEspeciales,
   stringToUpperAndTrim,
 } from "@/utils/stringNormalization";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -44,6 +44,7 @@ export const GameForm = ({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -107,7 +108,13 @@ export const GameForm = ({
     validateWord(currentWord)
       .then(onValidationSuccessful)
       .catch((error: Error) => setError(error.message))
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+        setTimeout(() => {
+          // sin este timeout no llega a tiempo
+          inputRef?.current?.focus(); // focusea al input principal
+        }, 0);
+      });
   };
 
   const onValidationSuccessful = (wordValidation: WordValidation) => {
@@ -198,6 +205,7 @@ export const GameForm = ({
           value={currentWord}
           error={error}
           disabled={isLoading}
+          ref={inputRef}
         ></Input>
         <Button
           type="submit"
