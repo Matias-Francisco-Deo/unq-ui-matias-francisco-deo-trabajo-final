@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+.button {
+  @apply flex flex-row;
+
+  @apply bg-primary rounded-none text-primary-foreground px-4 py-2 transition;
+
+  @apply enabled:hover:text-selection;
+
+  @apply disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+@layer base {
+  button {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@font-face {
+  font-family: "deltarune";
+  src: url("\src\assets\deltarune.ttf") format("truetype");
+}
+
+@theme {
+  --color-background: #000000;
+  --color-foreground: #323232;
+
+  --color-primary: #000000;
+  --color-primary-foreground: #ffffff;
+
+  --color-input: #fafafa;
+  --color-input-foreground: #737373;
+
+  --color-muted: #ffffff;
+  --color-muted-foreground: #4e4e4e;
+
+  --color-destructive: #e7000b;
+  --color-destructive-foreground: #ffffff;
+
+  --color-background-add: #cccccc;
+
+  --color-border: #cccccc;
+
+  --font-deltarune: "deltarune", sans-serif;
+
+  --color-selection: #f9ff10;
+
+  --aspect-poster: 2/3;
+
+  --aspect-rectangle: 3/2;
+
+  --aspect-preview: 35/46;
+}
+
+@utility text-gradient {
+  background-image: linear-gradient(to right, #ff5c00, #ff0069, #d300c5);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@utility link {
+  color: var(--color-primary);
+
+  text-decoration-color: transparent;
+  text-decoration-line: underline;
+  text-underline-offset: 4px;
+
+  transition:
+    opacity 150ms ease,
+    text-decoration-color 150ms ease;
+
+  &:hover {
+    opacity: 0.9;
+    text-decoration-color: currentColor;
+  }
+
+  &:active {
+    opacity: 0.75;
+  }
+}
+
+*::-webkit-scrollbar {
+  width: 4px; /* width of the entire scrollbar */
+}
+
+*::-webkit-scrollbar-track {
+  background: none;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(255, 255, 255);
+}
