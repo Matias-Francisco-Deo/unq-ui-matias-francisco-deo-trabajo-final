@@ -74,7 +74,7 @@ export const GameForm = ({
     const lastPreviousLetter = previousWords.at(-1)?.at(-1)?.toUpperCase();
     const currentWordNormalized = normalizeString(currentWord);
 
-    setGameStatus(GameStates["in-game"]);
+    // setGameStatus(GameStates["in-game"]);
 
     nextRound(lastPreviousLetter, currentWordNormalized);
   };
@@ -83,8 +83,6 @@ export const GameForm = ({
     lastPreviousLetter: string | undefined,
     currentWordNormalized: string,
   ) => {
-    setWordError("");
-
     const currentWordInPast = previousWords.includes(currentWordNormalized);
 
     const wordStartsWithPreviousLetter =
@@ -120,6 +118,7 @@ export const GameForm = ({
       setWordError("La palabra no existe");
       return;
     }
+    setGameStatus(GameStates["in-game"]);
     updateNextRound();
   };
 
@@ -143,7 +142,7 @@ export const GameForm = ({
   ) => {
     const value = e.target.value;
     if (value.toUpperCase() === "GASTER") navigate(0); // easter egg 1
-
+    setWordError("");
     setCurrentWord(stringToUpperAndTrim(value));
   };
 
