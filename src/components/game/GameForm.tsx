@@ -194,7 +194,7 @@ export const GameForm = ({
         {...props}
       >
         <Input
-          className="w-4/5 rounded-none "
+          className="w-50 rounded-none focus:outline-none"
           placeholder="¡Aquí!"
           onChange={handleInputChange}
           maxLength={20}
@@ -210,7 +210,7 @@ export const GameForm = ({
         ></Input>
         <Button
           type="submit"
-          className="w-4/5 border rounded-none flex justify-center"
+          className="w-50 border rounded-none flex justify-center"
           disabled={isLoading}
         >
           Ingresar palabra
