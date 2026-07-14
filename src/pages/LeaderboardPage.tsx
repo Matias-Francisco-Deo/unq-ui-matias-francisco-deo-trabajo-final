@@ -16,23 +16,23 @@ export default function LeaderboardPage() {
   return (
     <div className="w-full h-full flex flex-col items-center">
       <h1 className="text-4xl p-10">Palabras Encadenadas: Leaderboard</h1>
-      <table className="flex overflow-y-auto h-100">
-        <thead>
+      <div className="grid gap-0 font-bold text-2xl overflow-y-auto h-100">
+        <div>
           {hasEntries && (
-            <tr className="flex gap-4 text-2xl">
-              <td>NOMBRE</td>
-              <td>PUNTUACION</td>
-            </tr>
+            <div className="grid grid-cols-2 gap-0 text-2xl pb-4">
+              <div>NOMBRE</div>
+              <div>PUNTUACION</div>
+            </div>
           )}
           {hasEntries &&
             entries.map((arr) => {
               const name = arr[0];
               const score = arr[1];
               return (
-                <tr key={name} className="flex gap-20 text-2xl">
-                  <th>{name}</th>
-                  <td>{score}</td>
-                </tr>
+                <div key={name} className="grid grid-cols-2 gap-0 text-2xl">
+                  <div>{name}</div>
+                  <div>{score}</div>
+                </div>
               );
             })}
           {!hasEntries && (
@@ -41,8 +41,8 @@ export default function LeaderboardPage() {
               puntaje aquí!
             </p>
           )}
-        </thead>
-      </table>
+        </div>
+      </div>
     </div>
   );
 }
