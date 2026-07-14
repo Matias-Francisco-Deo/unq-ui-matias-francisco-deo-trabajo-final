@@ -16,7 +16,7 @@ export const Input = ({ error, className, ...props }: inputProps) => {
         "user-invalid:focus:outline-destructive",
         "user-invalid:placeholder:text-destructive",
 
-        error && "border-red-500 focus:outline-red-500",
+        error && "border-destructive focus:outline-red-500",
 
         className,
       )}
