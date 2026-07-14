@@ -19,7 +19,6 @@ export const Button = ({
       }}
       {...props}
     >
-      {/* <img src={"src/assets/soul.png"} alt="selected" className="w-6 h-6" /> */}
       {children}
     </button>
   );
