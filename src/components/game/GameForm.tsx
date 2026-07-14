@@ -110,10 +110,6 @@ export const GameForm = ({
       .catch((error: Error) => setError(error.message))
       .finally(() => {
         setIsLoading(false);
-        setTimeout(() => {
-          // sin este timeout no llega a tiempo
-          inputRef?.current?.focus(); // focusea al input principal
-        }, 0);
       });
   };
 
@@ -149,6 +145,10 @@ export const GameForm = ({
 
     setCurrentWord(stringToUpperAndTrim(value));
   };
+
+  useEffect(() => {
+    inputRef?.current?.focus();
+  }, [isLoading]);
 
   const gameOver = () => {
     setGameStatus(GameStates.over);
