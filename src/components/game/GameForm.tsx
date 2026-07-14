@@ -103,9 +103,9 @@ export const GameForm = ({
     validateWordWithAPI(currentWordNormalized);
   };
 
-  const validateWordWithAPI = (currentWord: string) => {
+  const validateWordWithAPI = (currentWordNormalized: string) => {
     setIsLoading(true);
-    validateWord(currentWord)
+    validateWord(currentWordNormalized)
       .then(onValidationSuccessful)
       .catch((error: Error) => setError(error.message))
       .finally(() => {
@@ -123,14 +123,14 @@ export const GameForm = ({
       setError("La palabra no existe");
       return;
     }
-    updateNextRound(currentWord);
+    updateNextRound();
   };
 
-  const updateNextRound = (currentWordNormalized: string) => {
+  const updateNextRound = () => {
     setCurrentWord("");
-    setPreviousWords((prev) => [...prev, currentWordNormalized]);
+    setPreviousWords((prev) => [...prev, normalizeString(currentWord)]);
     setTimer(MAX_TIMER);
-    setScore((prev) => prev + currentWordNormalized.length);
+    setScore((prev) => prev + currentWord.length);
   };
 
   const resetGame = () => {
@@ -138,6 +138,7 @@ export const GameForm = ({
     setTimer(MAX_TIMER);
     setScore(0);
     setCurrentWord("");
+    setError("");
   };
 
   const handleInputChange = (
