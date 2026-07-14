@@ -42,8 +42,9 @@ export const GameForm = ({
   const [playername, setPlayerName] = useState<string>("");
   const [gameStatus, setGameStatus] = useState<GameStates>(GameStates.idle);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
+  const [wordError, setWordError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [nameError, setNameError] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
@@ -82,7 +83,7 @@ export const GameForm = ({
     lastPreviousLetter: string | undefined,
     currentWordNormalized: string,
   ) => {
-    setError("");
+    setWordError("");
 
     const currentWordInPast = previousWords.includes(currentWordNormalized);
 
@@ -91,46 +92,42 @@ export const GameForm = ({
       currentWordNormalized.startsWith(lastPreviousLetter);
 
     if (!wordStartsWithPreviousLetter) {
-      setError(`La palabra no comienza con ${lastPreviousLetter}`);
+      setWordError(`La palabra no comienza con ${lastPreviousLetter}`);
       return;
     }
 
     if (currentWordInPast) {
-      setError("La palabra ya fue usada");
+      setWordError("La palabra ya fue usada");
       return;
     }
 
     validateWordWithAPI(currentWordNormalized);
   };
 
-  const validateWordWithAPI = (currentWord: string) => {
+  const validateWordWithAPI = (currentWordNormalized: string) => {
     setIsLoading(true);
-    validateWord(currentWord)
+    validateWord(currentWordNormalized)
       .then(onValidationSuccessful)
-      .catch((error: Error) => setError(error.message))
+      .catch((error: Error) => setWordError(error.message))
       .finally(() => {
         setIsLoading(false);
-        setTimeout(() => {
-          // sin este timeout no llega a tiempo
-          inputRef?.current?.focus(); // focusea al input principal
-        }, 0);
       });
   };
 
   const onValidationSuccessful = (wordValidation: WordValidation) => {
     const wordExists = wordValidation.exists;
     if (!wordExists) {
-      setError("La palabra no existe");
+      setWordError("La palabra no existe");
       return;
     }
-    updateNextRound(currentWord);
+    updateNextRound();
   };
 
-  const updateNextRound = (currentWordNormalized: string) => {
+  const updateNextRound = () => {
     setCurrentWord("");
-    setPreviousWords((prev) => [...prev, currentWordNormalized]);
+    setPreviousWords((prev) => [...prev, normalizeString(currentWord)]);
     setTimer(MAX_TIMER);
-    setScore((prev) => prev + currentWordNormalized.length);
+    setScore((prev) => prev + currentWord.length);
   };
 
   const resetGame = () => {
@@ -138,6 +135,7 @@ export const GameForm = ({
     setTimer(MAX_TIMER);
     setScore(0);
     setCurrentWord("");
+    setWordError("");
   };
 
   const handleInputChange = (
@@ -148,6 +146,10 @@ export const GameForm = ({
 
     setCurrentWord(stringToUpperAndTrim(value));
   };
+
+  useEffect(() => {
+    inputRef?.current?.focus();
+  }, [isLoading]);
 
   const gameOver = () => {
     setGameStatus(GameStates.over);
@@ -181,6 +183,7 @@ export const GameForm = ({
 
   const handleConfirm = () => {
     resetGame();
+    setNameError("");
     setIsModalOpen(false);
   };
 
@@ -193,7 +196,7 @@ export const GameForm = ({
         {...props}
       >
         <Input
-          className="w-4/5 rounded-none "
+          className="w-50 rounded-none focus:outline-none"
           placeholder="¡Aquí!"
           onChange={handleInputChange}
           maxLength={20}
@@ -203,29 +206,32 @@ export const GameForm = ({
           autoCorrect="off"
           spellCheck={false}
           value={currentWord}
-          error={error}
+          error={wordError}
           disabled={isLoading}
           ref={inputRef}
         ></Input>
         <Button
           type="submit"
-          className="w-4/5 border rounded-none whitespace-nowrap gap-2"
+          className="w-50 border rounded-none flex justify-center"
           disabled={isLoading}
         >
           Ingresar palabra
         </Button>
-        <span className="min-h-5">{error ? "* " + error : error}</span>
+        <span className="min-h-5">
+          {wordError ? "* " + wordError : wordError}
+        </span>
       </form>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+        <div className="fixed gap-4 inset-0 z-50 flex flex-col items-center justify-center bg-black/40">
           <Modal
             cancelText="Ir a leaderboard"
             confirmText="Continuar"
             className=""
             desc={`Game Over, tu puntaje es: ${score}. Has encadenado ${previousWords.length} palabra${previousWords.length !== 1 ? "s" : ""}.`}
             onCancel={() => {
-              navigate("/leaderboard");
+              if (playername) navigate("/leaderboard");
+              setNameError("Debes escribir tu nombre para ir al leaderboard");
             }}
             onConfirm={handleConfirm}
             onFinally={() => {
@@ -251,6 +257,7 @@ export const GameForm = ({
               }}
             />
           </Modal>
+          <span className="text-xl h-4 text-destructive">{nameError}</span>
         </div>
       )}
     </div>
