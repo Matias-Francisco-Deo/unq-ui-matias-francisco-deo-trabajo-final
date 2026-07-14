@@ -210,7 +210,7 @@ export const GameForm = ({
         ></Input>
         <Button
           type="submit"
-          className="w-4/5 border rounded-none whitespace-nowrap gap-2"
+          className="w-4/5 border rounded-none flex justify-center"
           disabled={isLoading}
         >
           Ingresar palabra
